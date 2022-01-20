@@ -1,0 +1,198 @@
+﻿<Window x:Class="ProjectManager.Views.Dialogs.AddPostView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:cal="http://www.caliburnproject.org"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:ex="clr-namespace:ProjectManager.Extensions"
+        xmlns:local="clr-namespace:ProjectManager.ViewModels.Dialogs"
+        mc:Ignorable="d"
+        Title="AddPostView" 
+        Height="600"
+        Width="500"
+        FontFamily="{StaticResource NanumSquare}"
+        
+        AllowsTransparency="True" 
+        Background="Transparent"
+        ResizeMode="NoResize" 
+        WindowStyle="None" 
+        WindowStartupLocation="CenterOwner"
+        
+        cal:Message.Attach="[Event Loaded] = [Action OnLoaded]">
+
+    <Window.Resources>
+        <materialDesign:BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
+        <ex:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+    </Window.Resources>
+    
+    <Border Margin="20">
+        <Border.Effect>
+            <DropShadowEffect 
+                Color="Black"
+                Direction="0"
+                BlurRadius="10"
+                ShadowDepth="0"/>
+        </Border.Effect>
+
+        <materialDesign:TransitioningContent OpeningEffect="{materialDesign:TransitionEffect Kind=ExpandIn, Duration=0:0:0.2}">
+            <materialDesign:Card 
+                IsEnabled="{Binding Path=IsServerRunning, Converter={StaticResource InverseBooleanConverter}}"
+                FontSize="17">
+                <Grid>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="60"/>
+                        </Grid.RowDefinitions>
+
+                        <StackPanel 
+                            Background="#FF66808D"
+                            Orientation="Horizontal">
+                            <materialDesign:PackIcon
+                                Kind="LibraryAdd"
+                                Foreground="White"
+                                VerticalAlignment="Center"
+                                Margin="10,0,0,0"/>
+                            <TextBlock 
+                                Text="새 내용 추가"
+                                FontWeight="SemiBold"
+                                Foreground="White"
+                                VerticalAlignment="Center"
+                                Margin="10,0,0,0"/>
+                        </StackPanel>
+
+                        <StackPanel
+                            Grid.Row="1"
+                            Margin="20">
+                            <StackPanel 
+                                Orientation="Horizontal">
+                                <TextBlock 
+                                    Text="등록 유형"
+                                    FontWeight="SemiBold"
+                                    VerticalAlignment="Center"/>
+                                <ComboBox 
+                                    x:Name="cb" 
+                                    materialDesign:HintAssist.Hint="등록 유형 선택"
+                                    ItemsSource="{Binding Categories}"
+                                    SelectedItem="{Binding SelectedCategory}"
+                                    Width="150"
+                                    Margin="20,0,0,0"/>
+                            </StackPanel>
+                            <Border 
+                                BorderThickness="0.1" 
+                                BorderBrush="Gray" 
+                                VerticalAlignment="Bottom"
+                                Margin="20"/>
+                            <TextBlock 
+                                x:Name="ContentTextBlock"
+                                Text="내용"
+                                FontWeight="SemiBold"
+                                VerticalAlignment="Center"/>
+                            <TextBox 
+                                Text="{Binding Content}" 
+                                TextWrapping="Wrap"
+                                AcceptsReturn="True"
+                                ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                Height="125"
+                                Margin="0,10,0,0"/>
+                            <Border 
+                                BorderThickness="0.1" 
+                                BorderBrush="Gray" 
+                                VerticalAlignment="Bottom"
+                                Margin="20"/>
+                            <DockPanel>
+                                <TextBlock 
+                                    Text="첨부 자료"
+                                    FontWeight="SemiBold"
+                                    VerticalAlignment="Center"/>
+                                <Button 
+                                    x:Name="AddAttachmentButton"
+                                    Foreground="White"
+                                    Content="첨부 파일 추가"
+                                    HorizontalAlignment="Right"/>
+                            </DockPanel>
+                            <Grid>
+                                <ListView 
+                                    ItemsSource="{Binding Attachments}"
+                                    Margin="0,10,0,10"
+                                    Height="110">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock 
+                                                Grid.Column="0"
+                                                Text="{Binding}"/>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </Grid>
+                        </StackPanel>
+
+                        <DockPanel 
+                            Grid.Row="2"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Right"
+                            Margin="10">
+                            <!-- Cancel Button -->
+                            <Button 
+                                x:Name="CancelButton" 
+                                BorderBrush="{x:Null}"
+                                Foreground="#DDFFFFFF" 
+                                Padding="10"
+                                Margin="10,0,0,0"
+                                Height="40">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon 
+                                        Kind="Cancel" 
+                                        VerticalAlignment="Center" 
+                                        HorizontalAlignment="Center"
+                                        Width="20" Height="20"/>
+                                    <TextBlock 
+                                        Text="취소"
+                                        FontSize="17"
+                                        VerticalAlignment="Center"
+                                        Margin="10,0,10,0"/>
+                                </StackPanel>
+                            </Button>
+                            <!-- Upload Button -->
+                            <Button 
+                                x:Name="UploadButton" 
+                                BorderBrush="{x:Null}"
+                                Foreground="#DDFFFFFF" 
+                                Padding="10"
+                                Margin="10,0,0,0"
+                                Height="40">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon 
+                                        Kind="Check" 
+                                        VerticalAlignment="Center" 
+                                        HorizontalAlignment="Center"
+                                        Width="20" Height="20"/>
+                                    <TextBlock 
+                                        Text="업로드"
+                                        FontSize="17"
+                                        VerticalAlignment="Center"
+                                        Margin="10,0,10,0"/>
+                                </StackPanel>
+                            </Button>
+                        </DockPanel>
+                    </Grid>
+                    
+                    <Grid>
+                        <materialDesign:Card 
+                            Visibility="{Binding Path=IsServerRunning, Converter={StaticResource BoolToVisibility}}"
+                            Background="White" 
+                            Height="70" Width="70">
+                            <ProgressBar 
+                                Style="{StaticResource MaterialDesignCircularProgressBar}"
+                                IsIndeterminate="True"
+                                Width="50" Height="50"/>
+                        </materialDesign:Card>
+                    </Grid>
+                </Grid>
+            </materialDesign:Card>
+        </materialDesign:TransitioningContent>
+    </Border>
+</Window>
+

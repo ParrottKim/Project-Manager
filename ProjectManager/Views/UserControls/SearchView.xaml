@@ -1,0 +1,212 @@
+﻿<UserControl x:Class="ProjectManager.Views.UserControls.SearchView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:cal="http://www.caliburnproject.org"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:local="clr-namespace:ProjectManager.Views.UserControls"
+             xmlns:ex="clr-namespace:ProjectManager.Extensions"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" 
+             d:DesignWidth="800"
+             FontFamily="{StaticResource NanumSquare}"
+             FontSize="17">
+
+    <UserControl.Resources>
+        <materialDesign:BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
+        <ex:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="4"/>
+            <RowDefinition Height="7*"/>
+        </Grid.RowDefinitions>
+
+        <DockPanel
+            VerticalAlignment="Center"
+            HorizontalAlignment="Stretch"
+            Margin="20">
+            <RadioButton 
+                x:Name="FactoryChecked"
+                Style="{StaticResource MaterialDesignTabRadioButton}" 
+                Content="공장"
+                GroupName="Search"
+                FontSize="18"
+                Width="120" Height="40"
+                Padding="0"
+                VerticalContentAlignment="Center"
+                HorizontalContentAlignment="Center"
+                cal:Message.Attach="[Event Checked] = [Action OnChecked]"/>
+            <RadioButton 
+                x:Name="ProjectNameChecked"
+                Style="{StaticResource MaterialDesignTabRadioButton}" 
+                Content="프로젝트 명"
+                GroupName="Search"
+                FontSize="18"
+                Width="120" Height="40"
+                Padding="0"
+                VerticalContentAlignment="Center"
+                HorizontalContentAlignment="Center"
+                cal:Message.Attach="[Event Checked] = [Action OnChecked]"/>
+            <RadioButton 
+                x:Name="ProjectManagerChecked"
+                Style="{StaticResource MaterialDesignTabRadioButton}" 
+                Content="PM"
+                GroupName="Search"
+                FontSize="18"
+                Width="120" Height="40"
+                Padding="0"
+                VerticalContentAlignment="Center"
+                HorizontalContentAlignment="Center"
+                cal:Message.Attach="[Event Checked] = [Action OnChecked]"/>
+
+            <Rectangle 
+                Width="1"
+                Fill="LightGray"
+                Margin="40,0,40,0"/>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="60"/>
+                </Grid.ColumnDefinitions>
+                
+                <TextBox 
+                    Grid.Column="0"
+                    Text="{Binding Keyword}"
+                    materialDesign:HintAssist.Hint="검색"
+                    IsEnabled="{Binding IsEnabled}"
+                    cal:Message.Attach="[Event KeyDown] = [Action SearchKeyDown($source, $eventArgs)]"/>
+                <Button 
+                    Grid.Column="1"
+                    x:Name="SearchButton"
+                    IsEnabled="{Binding IsEnabled}"
+                    Padding="0"
+                    Width="40" Height="40">
+                    <materialDesign:PackIcon
+                        Kind="Search"
+                        Foreground="White"
+                        Width="30" Height="30"
+                        HorizontalAlignment="Center"/>
+                </Button>
+            </Grid>
+        </DockPanel>
+
+        <Rectangle 
+            Grid.Row="1"
+            Height="1"
+            Fill="LightGray"
+            Margin="20,0,20,0"/>
+
+        <DataGrid
+            Grid.Row="2"
+            Margin="0,20,0,0"
+            x:Name="ProjectDataGird"
+            Visibility="{Binding Path=IsDataGridVisible, Converter={StaticResource BoolToVisibility}, FallbackValue=Hidden}"
+            AutoGenerateColumns="False"
+            IsReadOnly="True"
+            SelectionUnit="FullRow"
+            Style="{StaticResource MaterialDesignDataGrid}"
+            CellStyle="{StaticResource MaterialDesignDataGridCell}"
+            ColumnHeaderStyle="{StaticResource MaterialDesignDataGridColumnHeader}"
+            ItemsSource="{Binding Projects}"
+            SelectedItem="{Binding SelectedProject}"
+            cal:Message.Attach="[Event MouseDoubleClick] = [Action OnMouseDoubleClick]">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn 
+                    Header="고객사"
+                    Width="SizeToHeader"
+                    CanUserSort="True"
+                    SortMemberPath="CustomerId">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Image 
+                                Source="{Binding Path=CustomerLogo}"
+                                RenderOptions.BitmapScalingMode="Fant"
+                                HorizontalAlignment="Center"
+                                Width="30" Height="30"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn 
+                    Header="공장"
+                    Width="2*"
+                    CanUserSort="True"
+                    SortMemberPath="FactoryName">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock 
+                                Text="{Binding Path=FactoryName}"
+                                VerticalAlignment="Center"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn 
+                    Header="프로젝트 번호"
+                    Width="2*"
+                    CanUserSort="True"
+                    SortMemberPath="ProjectCode">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock 
+                                Text="{Binding Path=ProjectCode}"
+                                VerticalAlignment="Center"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn 
+                    Header="프로젝트 이름"
+                    Width="5*"
+                    CanUserSort="True"
+                    SortMemberPath="ProjectName">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock 
+                                Text="{Binding Path=ProjectName}"
+                                VerticalAlignment="Center"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn 
+                    Header="PM"
+                    Width="*"
+                    CanUserSort="True"
+                    SortMemberPath="UserId">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock 
+                                Text="{Binding Path=Username}"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn 
+                    Header="카테고리"
+                    Width="2*"
+                    CanUserSort="True"
+                    SortMemberPath="CategoryId">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <materialDesign:Card 
+                                Background="{Binding Path=Color}"
+                                Width="100">
+                                <TextBlock 
+                                    Text="{Binding Path=CategoryName}"
+                                    FontWeight="Black"
+                                    FontSize="15"
+                                    Foreground="White"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Margin="4"/>
+                            </materialDesign:Card>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

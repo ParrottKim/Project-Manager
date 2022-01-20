@@ -1,0 +1,104 @@
+﻿<Window x:Class="ProjectManager.Views.AdminView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ProjectManager.Views"
+        xmlns:cal="http://www.caliburnproject.org"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Title="AdminView" 
+        Height="450" 
+        Width="800"
+        MaxHeight="{Binding Source={x:Static SystemParameters.MaximizedPrimaryScreenHeight}}"
+        FontFamily="{StaticResource NanumSquare}"
+       
+        AllowsTransparency="True"
+        WindowStyle="None"
+        WindowStartupLocation="CenterScreen">
+    <Border
+        BorderBrush="Black"
+        BorderThickness="1"
+        CornerRadius="4">
+        <materialDesign:Card>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="250"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid 
+                    Grid.ColumnSpan="2"
+                    Background="#FF262B33"
+                    cal:Message.Attach="[Event MouseDown] = [Action TitleBarDoubleClick($source, $eventArgs)]">
+                    <DockPanel 
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        LastChildFill="True"
+                        Background="#FF262B33">
+                        <Grid Margin="10,0,0,0">
+                            <Ellipse
+                                Fill="White"
+                                Height="16" Width="16"/>
+                            <materialDesign:PackIcon
+                                Kind="SemanticWeb"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Height="12" Width="12"/>
+                        </Grid>
+                        <TextBlock 
+                            Text="프로젝트 관리자"
+                            Foreground="White"
+                            VerticalAlignment="Center"
+                            Margin="10,0,0,0"/>
+                        <TextBlock 
+                            Text="{Binding CurrentVersion}"
+                            FontSize="12"
+                            Foreground="White"
+                            VerticalAlignment="Center"
+                            Margin="10,0,0,0"/>
+                        <Grid 
+                            DockPanel.Dock="Right"
+                            HorizontalAlignment="Right">
+                            <StackPanel 
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center">
+                                <Button 
+                                    x:Name="MinimizeButton"
+                                    Style="{StaticResource MaterialDesignFlatButton}"
+                                    KeyboardNavigation.IsTabStop="False">
+                                    <materialDesign:PackIcon
+                                        Kind="WindowMinimize"
+                                        Foreground="White"/>
+                                </Button>
+                                <Button 
+                                    x:Name="MaximizeButton"
+                                    Style="{StaticResource MaterialDesignFlatButton}"
+                                    KeyboardNavigation.IsTabStop="False">
+                                    <materialDesign:PackIcon
+                                        Kind="WindowMaximize"
+                                        Foreground="White"/>
+                                </Button>
+                                <Button 
+                                    x:Name="CloseButton"
+                                    Style="{StaticResource MaterialDesignFlatButton}"
+                                    KeyboardNavigation.IsTabStop="False">
+                                    <materialDesign:PackIcon
+                                        Kind="Close"
+                                        Foreground="White"/>
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+                    </DockPanel>
+                </Grid>
+                
+                
+            </Grid>
+        </materialDesign:Card>
+    </Border>
+</Window>

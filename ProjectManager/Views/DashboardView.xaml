@@ -1,0 +1,325 @@
+﻿<Window x:Class="ProjectManager.Views.DashboardView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:cal="http://www.caliburnproject.org"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:local="clr-namespace:ProjectManager.Views"
+        mc:Ignorable="d"
+        Title="Project Manager" 
+        Height="800" 
+        Width="1400"
+        MaxHeight="{Binding Source={x:Static SystemParameters.MaximizedPrimaryScreenHeight}}"
+        FontFamily="{StaticResource NanumSquare}"
+       
+        AllowsTransparency="True"
+        WindowStyle="None"
+        WindowStartupLocation="CenterScreen"
+        
+        cal:Message.Attach="[Event Loaded] = [Action OnLoaded]; [Event Closing] = [Action OnClosing]">
+
+    <Window.Resources>
+        <ScaleTransform x:Key="WindowScaleMinimize" ScaleX="1.0" ScaleY="1.0" />
+        <ScaleTransform x:Key="WindowScaleMaximize" ScaleX="1.05" ScaleY="1.05" />
+        <Style TargetType="Border">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding WindowState, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Value="Normal">
+                    <Setter Property="LayoutTransform" Value="{StaticResource WindowScaleMinimize}" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding WindowState, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"  Value="Maximized">
+                    <Setter Property="LayoutTransform" Value="{StaticResource WindowScaleMaximize}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Border
+        BorderBrush="Black"
+        BorderThickness="1"
+        CornerRadius="4">
+        <materialDesign:DialogHost 
+            IsOpen="{Binding IsEnabled}"
+            Style="{StaticResource MaterialDesignEmbeddedDialogHost}">
+            <materialDesign:Card>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="250"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid 
+                        Grid.ColumnSpan="2"
+                        Background="#FF262B33"
+                        cal:Message.Attach="[Event MouseDown] = [Action TitleBarDoubleClick($source, $eventArgs)]">
+                        <DockPanel 
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            LastChildFill="True"
+                            Background="#FF262B33">
+                            <Grid Margin="10,0,0,0">
+                                <Ellipse
+                                    Fill="White"
+                                    Height="16" Width="16"/>
+                                <materialDesign:PackIcon
+                                    Kind="SemanticWeb"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Height="12" Width="12"/>
+                            </Grid>
+                            <TextBlock 
+                                Text="프로젝트 관리자"
+                                Foreground="White"
+                                VerticalAlignment="Center"
+                                Margin="10,0,0,0"/>
+                            <TextBlock 
+                                Text="{Binding CurrentVersion}"
+                                FontSize="12"
+                                Foreground="White"
+                                VerticalAlignment="Center"
+                                Margin="10,0,0,0"/>
+                            <Grid 
+                                DockPanel.Dock="Right"
+                                HorizontalAlignment="Right">
+                                <StackPanel 
+                                    Orientation="Horizontal"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Center">
+                                    <Button 
+                                        x:Name="MinimizeButton"
+                                        Style="{StaticResource MaterialDesignFlatButton}"
+                                        KeyboardNavigation.IsTabStop="False">
+                                        <materialDesign:PackIcon
+                                            Kind="WindowMinimize"
+                                            Foreground="White"/>
+                                    </Button>
+                                    <Button 
+                                        x:Name="MaximizeButton"
+                                        Style="{StaticResource MaterialDesignFlatButton}"
+                                        KeyboardNavigation.IsTabStop="False">
+                                        <materialDesign:PackIcon
+                                            Kind="WindowMaximize"
+                                            Foreground="White"/>
+                                    </Button>
+                                    <Button 
+                                        x:Name="CloseButton"
+                                        Style="{StaticResource MaterialDesignFlatButton}"
+                                        KeyboardNavigation.IsTabStop="False">
+                                        <materialDesign:PackIcon
+                                            Kind="Close"
+                                            Foreground="White"/>
+                                    </Button>
+                                </StackPanel>
+                            </Grid>
+                        </DockPanel>
+                    </Grid>
+
+                    <DockPanel 
+                        Grid.Row="1" 
+                        Background="#FF262B33">
+                        <DockPanel DockPanel.Dock="Top">
+                            <ListView 
+                                DockPanel.Dock="Top"
+                                Foreground="White"
+                                Margin="10"
+                                cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action OnMainListPreviewMouseLeftButtonUp($source)]">
+                                <ListViewItem>
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon 
+                                            Kind="Home"
+                                            HorizontalAlignment="Stretch" 
+                                            VerticalAlignment="Stretch" 
+                                            Margin="0,0,5,0" 
+                                            Width="24" Height="24"/>
+                                        <TextBlock 
+                                            Text="메인"
+                                            FontSize="19"
+                                            VerticalAlignment="Center" 
+                                            Margin="10,0,0,0"/>
+                                    </StackPanel>
+                                </ListViewItem>
+                                <ListViewItem 
+                                    HorizontalContentAlignment="Stretch"
+                                    IsEnabled="False"
+                                    IsHitTestVisible="False">
+                                    <Rectangle 
+                                        Height="1"
+                                        Fill="Gray" />
+                                </ListViewItem>
+                                <ListViewItem IsHitTestVisible="False">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock 
+                                            Text="프로젝트 보기" 
+                                            FontSize="14"/>
+                                    </StackPanel>
+                                </ListViewItem>
+                                <ListViewItem>
+                                    <DockPanel>
+                                        <materialDesign:PackIcon 
+                                            Kind="Clock"
+                                            HorizontalAlignment="Stretch" 
+                                            VerticalAlignment="Stretch" 
+                                            Margin="0,0,5,0" 
+                                            Width="24" Height="24"/>
+                                        <TextBlock 
+                                            Text="최신 순" 
+                                            FontSize="19"
+                                            VerticalAlignment="Center" 
+                                            Margin="10,0,0,0"/>
+                                    </DockPanel>
+                                </ListViewItem>
+                                <ListViewItem VerticalContentAlignment="Center">
+                                    <DockPanel>
+                                        <materialDesign:PackIcon 
+                                            Kind="Factory"
+                                            HorizontalAlignment="Stretch" 
+                                            VerticalAlignment="Stretch" 
+                                            Margin="0,0,5,0" 
+                                            Width="24" Height="24"/>
+                                        <TextBlock 
+                                            Text="사이트 별" 
+                                            FontSize="19"
+                                            VerticalAlignment="Center" 
+                                            Margin="10,0,0,0"/>
+                                    </DockPanel>
+                                </ListViewItem>
+                                <ListViewItem 
+                                    HorizontalContentAlignment="Stretch"
+                                    IsEnabled="False"
+                                    IsHitTestVisible="False">
+                                    <Rectangle 
+                                        Height="1"
+                                        Fill="Gray" />
+                                </ListViewItem>
+                                <ListViewItem IsHitTestVisible="False">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock 
+                                            Text="추가 기능" 
+                                            FontSize="14"/>
+                                    </StackPanel>
+                                </ListViewItem>
+                                <ListViewItem>
+                                    <DockPanel>
+                                        <materialDesign:PackIcon 
+                                            Kind="Bookmark"
+                                            HorizontalAlignment="Stretch" 
+                                            VerticalAlignment="Stretch" 
+                                            Margin="0,0,5,0" 
+                                            Width="24" Height="24"/>
+                                        <TextBlock 
+                                            Text="북마크" 
+                                            FontSize="19"
+                                            VerticalAlignment="Center" 
+                                            Margin="10,0,0,0"/>
+                                    </DockPanel>
+                                </ListViewItem>
+                                <ListViewItem>
+                                    <DockPanel>
+                                        <materialDesign:PackIcon 
+                                            Kind="Search"
+                                            HorizontalAlignment="Stretch" 
+                                            VerticalAlignment="Stretch" 
+                                            Margin="0,0,5,0" 
+                                            Width="24" Height="24"/>
+                                        <TextBlock 
+                                            Text="상세검색" 
+                                            FontSize="19"
+                                            VerticalAlignment="Center" 
+                                            Margin="10,0,0,0"/>
+                                    </DockPanel>
+                                </ListViewItem>
+                            </ListView>
+                        </DockPanel>
+                        <DockPanel 
+                            DockPanel.Dock="Bottom"
+                            VerticalAlignment="Bottom">
+                            <ListView 
+                                DockPanel.Dock="Top"
+                                Foreground="White"
+                                Margin="10"
+                                cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action OnSubListPreviewMouseLeftButtonUp($source)]">
+                                <ListViewItem>
+                                    <DockPanel>
+                                        <materialDesign:PackIcon 
+                                            Kind="User"
+                                            HorizontalAlignment="Stretch" 
+                                            VerticalAlignment="Stretch" 
+                                            Margin="0,0,5,0" 
+                                            Width="24" Height="24"/>
+                                        <DockPanel>
+                                            <TextBlock 
+                                                DockPanel.Dock="Top" 
+                                                Text="내 정보" 
+                                                FontSize="12"
+                                                Margin="10,0,0,0"/>
+                                            <TextBlock 
+                                                DockPanel.Dock="Bottom" 
+                                                Text="{Binding CurrentUser.Email}" 
+                                                FontSize="14"
+                                                Margin="10,0,0,0"/>
+                                        </DockPanel>
+                                    </DockPanel>
+                                </ListViewItem>
+                                <ListViewItem>
+                                    <DockPanel>
+                                        <materialDesign:PackIcon 
+                                            Kind="SignOut"
+                                            HorizontalAlignment="Stretch" 
+                                            VerticalAlignment="Stretch" 
+                                            Margin="0,0,5,0" 
+                                            Width="24" Height="24"/>
+                                        <TextBlock 
+                                            Text="로그아웃" 
+                                            FontSize="18"
+                                            VerticalAlignment="Center" 
+                                            Margin="10,0,0,0"/>
+                                    </DockPanel>
+                                </ListViewItem>
+                            </ListView>
+                        </DockPanel>
+                    </DockPanel>
+                    <!-- UserControl -->
+                    <Grid 
+                        Grid.Row="1"
+                        Grid.RowSpan="2"
+                        Grid.Column="1"
+                        Background="White">
+                        <ContentControl x:Name="ActiveItem"/>
+                    </Grid>
+                </Grid>
+            </materialDesign:Card>
+            <materialDesign:DialogHost.DialogContent>
+                <materialDesign:Card
+                    Width="300"
+                    Height="180">
+                    <StackPanel
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Margin="20">
+                        <ProgressBar 
+                            Style="{DynamicResource MaterialDesignCircularProgressBar}"
+                            IsIndeterminate="True"
+                            Width="30"
+                            Height="30"/>
+                        <TextBlock Margin="0,20,0,10">
+                            로그인 중입니다.
+                            <LineBreak/>
+                            로그인 중에 로그인 창이 닫혔으면
+                            <LineBreak/>
+                            아래 버튼을 눌러 다시 로그인해주세요.
+                        </TextBlock>
+                        <Button
+                            x:Name="LoginButton"
+                            Content="로그인 창 열기"
+                            Foreground="White"
+                            cal:Message.Attach="[Event Click] = [Action LoginButton]"/>
+                    </StackPanel>
+                </materialDesign:Card>
+            </materialDesign:DialogHost.DialogContent>
+        </materialDesign:DialogHost>
+    </Border>
+</Window>

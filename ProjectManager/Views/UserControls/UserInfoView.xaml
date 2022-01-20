@@ -1,0 +1,317 @@
+﻿<UserControl x:Class="ProjectManager.Views.UserControls.UserInfoView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:cal="http://www.caliburnproject.org"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:local="clr-namespace:ProjectManager.Views.UserControls"
+             xmlns:ex="clr-namespace:ProjectManager.Extensions"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" 
+             d:DesignWidth="800"
+             FontFamily="{StaticResource NanumSquare}"
+             FontSize="17"
+             
+             cal:Message.Attach="[Event Loaded] = [Action OnLoaded]">
+
+    <UserControl.Resources>
+        <materialDesign:BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
+        <ex:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="4"/>
+            <ColumnDefinition Width="280"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="4"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <DockPanel Background="#FF66808D">
+                <TextBlock 
+                    Text="작성 글 목록"
+                    Foreground="White"
+                    FontWeight="Black"
+                    FontSize="20"
+                    VerticalAlignment="Center"
+                    Margin="10,0,0,0"/>
+            </DockPanel>
+            <DataGrid 
+                Grid.Row="1"
+                x:Name="UserPostDataGrid"
+                AutoGenerateColumns="False"
+                HeadersVisibility="None"
+                IsReadOnly="True"
+                Width="Auto"
+                SelectionUnit="FullRow"
+                Style="{StaticResource MaterialDesignDataGrid}"
+                CellStyle="{StaticResource MaterialDesignDataGridCell}"
+                ColumnHeaderStyle="{StaticResource MaterialDesignDataGridColumnHeader}"
+                ItemsSource="{Binding Posts}"
+                SelectedItem="{Binding SelectedPost}"
+                FontSize="15"
+                cal:Message.Attach="[Event MouseDoubleClick] = [Action OnUserPostMouseDoubleClick]">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn
+                        Header="고객사"
+                        Width="SizeToCells">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Image 
+                                    Source="{Binding Path=CustomerLogo}"
+                                    RenderOptions.BitmapScalingMode="Fant"
+                                    Width="24" Height="24"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn 
+                        Header="공장"
+                        Width="1.5*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock 
+                                    Text="{Binding Path=FactoryName}"
+                                    VerticalAlignment="Center"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn 
+                        Header="프로젝트 번호"
+                        Width="2*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock 
+                                    Text="{Binding Path=ProjectCode}"
+                                    VerticalAlignment="Center"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn 
+                        Header="프로젝트 이름"
+                        Width="3*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock 
+                                    Text="{Binding Path=ProjectName}"
+                                    VerticalAlignment="Center"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn 
+                        Header="카테고리"
+                        Width="1.5*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <materialDesign:Card 
+                                    Background="{Binding Path=Color}"
+                                    Width="90">
+                                    <TextBlock 
+                                        Text="{Binding Path=CategoryName}"
+                                        FontWeight="Black"
+                                        FontSize="13"
+                                        Foreground="White"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Margin="4"/>
+                                </materialDesign:Card>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+        
+        <Rectangle 
+            Grid.Column="0"
+            Grid.Row="1"
+            Height="1"
+            Fill="LightGray"
+            Margin="20,0,20,0"/>
+        <Rectangle 
+            Grid.Column="1"
+            Grid.RowSpan="3"
+            Width="1"
+            Fill="LightGray"
+            Margin="0,20,0,20"/>
+
+        <Grid 
+            Grid.Row="2"
+            Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <DockPanel Background="#FF66808D">
+                <TextBlock 
+                    Text="PM 프로젝트"
+                    Foreground="White"
+                    FontWeight="Black"
+                    FontSize="20"
+                    VerticalAlignment="Center"
+                    Margin="10,0,0,0"/>
+            </DockPanel>
+            <DataGrid 
+                Grid.Row="1"
+                x:Name="ManagingPostDataGrid"
+                AutoGenerateColumns="False"
+                HeadersVisibility="None"
+                IsReadOnly="True"
+                Width="Auto"
+                SelectionUnit="FullRow"
+                Style="{StaticResource MaterialDesignDataGrid}"
+                CellStyle="{StaticResource MaterialDesignDataGridCell}"
+                ColumnHeaderStyle="{StaticResource MaterialDesignDataGridColumnHeader}"
+                ItemsSource="{Binding Projects}"
+                SelectedItem="{Binding SelectedProject}"
+                FontSize="15"
+                cal:Message.Attach="[Event MouseDoubleClick] = [Action OnManaginPostMouseDoubleClick]">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn 
+                        Header="고객사"
+                        Width="SizeToCells">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Image 
+                                    Source="{Binding Path=CustomerLogo}"
+                                    RenderOptions.BitmapScalingMode="Fant"
+                                    Width="24" Height="24"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn 
+                        Header="공장"
+                        Width="1.1*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock 
+                                    Text="{Binding Path=FactoryName}"
+                                    VerticalAlignment="Center"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn 
+                        Header="프로젝트 번호"
+                        Width="2*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock 
+                                    Text="{Binding Path=ProjectCode}"
+                                    VerticalAlignment="Center"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn 
+                        Header="프로젝트 이름"
+                        Width="3*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock 
+                                    Text="{Binding Path=ProjectName}"
+                                    VerticalAlignment="Center"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn 
+                        Header="PM"
+                        Width="*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock 
+                                    Text="{Binding Path=Username}"
+                                    VerticalAlignment="Center"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn 
+                        Header="카테고리"
+                        Width="1.5*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <materialDesign:Card 
+                                    Background="{Binding Path=Color}"
+                                    Width="90">
+                                    <TextBlock 
+                                        Text="{Binding Path=CategoryName}"
+                                        FontWeight="Black"
+                                        FontSize="13"
+                                        Foreground="White"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Margin="4"/>
+                                </materialDesign:Card>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+
+        <ListView 
+            Grid.Column="2"
+            Grid.RowSpan="2"
+            Margin="10"
+            cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action OnMainListPreviewMouseLeftButtonUp($source)]">
+            <ListViewItem IsHitTestVisible="False">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock 
+                        Text="사용자 정보 관련" 
+                        FontSize="14"/>
+                </StackPanel>
+            </ListViewItem>
+            <ListViewItem>
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon 
+                        Kind="PasswordReset"
+                        HorizontalAlignment="Stretch" 
+                        VerticalAlignment="Stretch" 
+                        Margin="0,0,5,0" 
+                        Width="24" Height="24"/>
+                    <TextBlock 
+                        Text="비밀번호 변경"
+                        FontSize="19"
+                        VerticalAlignment="Center" 
+                        Margin="10,0,0,0"/>
+                </StackPanel>
+            </ListViewItem>
+            <ListViewItem 
+                HorizontalContentAlignment="Stretch"
+                IsEnabled="False"
+                IsHitTestVisible="False"
+                Visibility="{Binding Path=IsAuthorized, Converter={StaticResource BoolToVisibility}, FallbackValue=Collapsed}">
+                <Rectangle 
+                    Height="1"
+                    Fill="Gray" />
+            </ListViewItem>
+            <ListViewItem
+                IsEnabled="False"
+                Visibility="{Binding Path=IsAuthorized, Converter={StaticResource BoolToVisibility}, FallbackValue=Collapsed}">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon 
+                        Kind="CardAccountDetails"
+                        HorizontalAlignment="Stretch" 
+                        VerticalAlignment="Stretch" 
+                        Margin="0,0,5,0" 
+                        Width="24" Height="24"/>
+                    <TextBlock 
+                        Text="관리자 모드"
+                        FontSize="19"
+                        VerticalAlignment="Center" 
+                        Margin="10,0,0,0"/>
+                </StackPanel>
+            </ListViewItem>
+        </ListView>
+    </Grid>
+</UserControl>
